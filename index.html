@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Tamil Study Cards</title>
+  <style>
+    :root{
+      --sun:#ffb23f;
+      --turmeric:#ffc94d;
+      --mango:#ffcf5c;
+      --kumkum:#c7352e;
+      --coral:#ff6b57;
+      --lotus:#d93678;
+      --peacock:#0f8f89;
+      --indigo:#24306f;
+      --sea:#18b6ad;
+      --deep:#173f4f;
+      --palm:#157c63;
+      --cream:#fff1c2;
+      --paper:#fffdf2;
+      --ink:#1e2a32;
+      --muted:#667477;
+      --shadow:0 20px 48px rgba(89,45,9,.25),0 10px 28px rgba(16,80,86,.18);
+      --radius:30px;
+      --safe-top:env(safe-area-inset-top,0px);
+      --safe-bottom:env(safe-area-inset-bottom,0px);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{height:100%;margin:0;overflow:hidden;}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans Tamil","Noto Sans JP","Segoe UI",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,248,188,.9) 0 8%, transparent 9%),
+        radial-gradient(circle at 88% 16%, rgba(255,118,86,.42) 0 13%, transparent 14%),
+        radial-gradient(circle at 10% 88%, rgba(16,142,137,.5) 0 17%, transparent 18%),
+        linear-gradient(150deg,#ffe77a 0%,#ffb13b 18%,#f06b45 39%,#c83b54 58%,#1a8d8f 78%,#143a76 100%);
+      position:relative;
+    }
+    body::before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        repeating-conic-gradient(from 45deg at 50% 50%, rgba(255,255,255,.0) 0 18deg, rgba(255,255,255,.22) 18deg 22deg, rgba(255,255,255,.0) 22deg 45deg) 0 0/82px 82px,
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.0) 0 34%, rgba(255,255,255,.22) 35% 36%, rgba(255,255,255,.0) 37%) 0 0/86px 86px;
+      opacity:.38;pointer-events:none;
+    }
+    body::after{
+      content:"✦ தமிழ் ✦ சென்னை ✦ மதுரை ✦ பொங்கல் ✦ கோலம் ✦";
+      position:absolute;left:-12px;right:-12px;bottom:10px;
+      color:rgba(255,255,255,.24);
+      font-family:"Noto Sans Tamil",system-ui,sans-serif;
+      font-weight:900;letter-spacing:.18em;font-size:18px;
+      white-space:nowrap;text-align:center;pointer-events:none;
+    }
+    .app{
+      position:relative;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      padding:calc(14px + var(--safe-top)) 16px calc(16px + var(--safe-bottom));
+      max-width:560px;
+      margin:0 auto;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color:#fff;
+      text-shadow:0 2px 10px rgba(0,0,0,.16);
+      min-height:48px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
+    .sunmark{
+      width:42px;height:42px;border-radius:50%;
+      background:
+        radial-gradient(circle,#fff9c7 0 28%,#ffcf5c 29% 48%,#e94a31 49% 67%,#24306f 68% 100%);
+      box-shadow:0 6px 18px rgba(155,69,0,.28), inset 0 0 0 3px rgba(255,255,255,.5);
+      position:relative;flex:none;
+    }
+    .sunmark::after{
+      content:"தமிழ்";
+      position:absolute;inset:0;display:grid;place-items:center;
+      font-size:10px;font-weight:900;color:#9a2f14;
+    }
+    .title{line-height:1.05;min-width:0;}
+    .title strong{display:block;font-size:15px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .title span{display:block;font-size:11px;opacity:.86;margin-top:3px;}
+    .lessonPill{
+      border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,.18);
+      color:#fff;border-radius:999px;
+      padding:8px 11px;font-size:12px;font-weight:800;white-space:nowrap;
+      backdrop-filter:blur(10px);
+    }
+    .stage{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      padding-top:clamp(148px,22vh,220px);
+      min-height:0;
+    }
+    .progressLine{
+      height:9px;
+      background:rgba(255,255,255,.32);
+      border:1px solid rgba(255,255,255,.35);
+      border-radius:999px;
+      overflow:hidden;
+      margin:0 3px 14px;
+      box-shadow:inset 0 1px 4px rgba(0,0,0,.08);
+    }
+    .progressFill{
+      width:0%;height:100%;
+      background:linear-gradient(90deg,#fff6a9,#ffe05c,#ff7a5a,#e94478);
+      border-radius:inherit;
+      transition:width .28s ease;
+    }
+    .cardWrap{perspective:1200px;position:relative;}
+    .card{
+      min-height:clamp(288px,43vh,455px);
+      border-radius:var(--radius);
+      background:
+        radial-gradient(circle at 16% 9%, rgba(255,205,74,.46), transparent 24%),
+        radial-gradient(circle at 84% 86%, rgba(15,143,137,.18), transparent 32%),
+        linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,250,231,.98)),
+        var(--paper);
+      box-shadow:var(--shadow);
+      border:2px solid rgba(255,246,211,.92);
+      padding:24px 21px 22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+      transform:translate3d(0,0,0);
+      transition:transform .28s cubic-bezier(.2,.8,.2,1), opacity .22s ease;
+      user-select:none;
+      touch-action:none;
+    }
+    .card::before{
+      content:"";
+      position:absolute;inset:12px;
+      border-radius:22px;
+      border:1.5px dashed rgba(235,102,65,.25);
+      pointer-events:none;
+    }
+    .card::after{
+      content:"❖ தமிழ் ❖ கோலம் ❖ சென்னை ❖";
+      position:absolute;left:18px;right:18px;bottom:14px;
+      color:rgba(36,48,111,.18);
+      font-family:"Noto Sans Tamil",system-ui,sans-serif;
+      font-size:13px;letter-spacing:.18em;
+      pointer-events:none;
+    }
+    .card.isLeavingNext{transform:translateY(-18px) scale(.985);opacity:.25;}
+    .card.isLeavingSide{transform:translateX(-24px) rotate(-1deg) scale(.985);opacity:.25;}
+    .sideBadge{
+      position:absolute;top:16px;left:17px;
+      padding:6px 10px;border-radius:999px;
+      font-size:11px;font-weight:900;letter-spacing:.06em;
+      color:#8b3318;background:#fff0be;border:1px solid rgba(190,94,35,.2);
+    }
+    .tapHint{
+      position:absolute;top:16px;right:17px;
+      font-size:11px;font-weight:800;color:#0c776d;background:#dffcf4;
+      border:1px solid rgba(19,160,148,.18);
+      border-radius:999px;padding:6px 9px;
+    }
+    .frontJa{
+      font-size:clamp(20px,5.15vw,30px);
+      line-height:1.34;
+      font-weight:900;
+      letter-spacing:.015em;
+      max-width:96%;
+      color:#203136;
+      text-wrap:balance;
+    }
+    .frontEn{
+      margin-top:14px;
+      color:#69777a;
+      font-size:clamp(11px,2.9vw,14px);
+      line-height:1.45;
+      max-width:92%;
+    }
+    .tamilText{
+      font-family:"Noto Sans Tamil", system-ui, sans-serif;
+      font-size:clamp(30px,8vw,48px);
+      line-height:1.28;
+      font-weight:900;
+      color:#a12828;
+      text-shadow:0 2px 0 rgba(255,233,172,.8);
+      max-width:98%;
+      word-break:keep-all;
+    }
+    .roman{
+      margin-top:12px;
+      color:#0d6f69;
+      font-size:clamp(14px,3.7vw,20px);
+      font-weight:850;
+      line-height:1.35;
+      max-width:96%;
+    }
+    .kana{
+      margin-top:8px;
+      color:#2b3032;
+      font-size:clamp(15px,4vw,21px);
+      font-weight:850;
+      line-height:1.4;
+      max-width:96%;
+    }
+    .meaning{
+      margin-top:13px;
+      color:#646f72;
+      font-size:clamp(12px,3.25vw,16px);
+      line-height:1.48;
+      max-width:94%;
+    }
+    .stemTitle{
+      font-size:clamp(18px,4.7vw,27px);
+      line-height:1.42;
+      font-weight:900;
+      color:#203136;
+      max-width:96%;
+    }
+    .stemFrontBlock{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      max-width:96%;
+      text-align:center;
+    }
+    .stemCategory{
+      font-size:clamp(18px,4.9vw,28px);
+      line-height:1.2;
+      font-weight:950;
+      color:#203136;
+      letter-spacing:.04em;
+      white-space:normal;
+    }
+    .stemQuote{
+      font-size:clamp(19px,5.2vw,30px);
+      line-height:1.2;
+      font-weight:950;
+      color:#203136;
+      white-space:normal;
+    }
+    .stemTarget{
+      font-size:clamp(20px,5.35vw,31px);
+      line-height:1.15;
+      font-weight:980;
+      color:#8f2420;
+      letter-spacing:.08em;
+    }
+    .stemTitle .tamilInline,.stemQuote .tamilInline{font-family:"Noto Sans Tamil",system-ui,sans-serif;color:#a12828;white-space:nowrap;}
+    .answerLabel{
+      color:#9c3a16;background:#fff0be;border:1px solid rgba(190,94,35,.18);
+      border-radius:999px;padding:5px 10px;font-size:11px;font-weight:950;letter-spacing:.09em;
+      margin-bottom:8px;
+    }
+    .stemAnswer{
+      font-family:"Noto Sans Tamil", system-ui, sans-serif;
+      font-weight:950;color:#9f2422;
+      font-size:clamp(43px,11.5vw,70px);
+      line-height:1.08;
+      text-shadow:0 2px 0 rgba(255,229,157,.88);
+      max-width:100%;
+    }
+    .changeBlock{
+      display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+      margin-top:14px;
+      font-family:"Noto Sans Tamil", system-ui, sans-serif;
+      font-weight:900;color:#a12828;
+      font-size:clamp(22px,5.8vw,34px);
+      line-height:1.2;
+      max-width:100%;
+    }
+    .changeBlock .toBig{font-size:1.16em;color:#8e1f21;}
+    .arrow{font-family:system-ui,sans-serif;color:#f2664d;font-size:.76em;}
+    .smallPair{margin-top:11px;color:#0d6f69;font-weight:850;font-size:clamp(13px,3.45vw,18px);line-height:1.34;}
+    .kanaPair{margin-top:6px;color:#2b3032;font-weight:850;font-size:clamp(14px,3.7vw,19px);line-height:1.34;}
+    .kanaPair .answerKana,.smallPair .answerRoman{font-size:1.18em;color:#9f2422;font-weight:950;}
+    .note{margin-top:10px;color:#687579;font-size:clamp(11px,3vw,14px);line-height:1.48;max-width:94%;}
+    .controls{
+      display:grid;
+      grid-template-columns:1.2fr 1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+    button{
+      appearance:none;border:none;font:inherit;cursor:pointer;
+      border-radius:18px;padding:13px 10px;
+      min-height:54px;
+      color:#17414a;font-weight:900;
+      background:rgba(255,255,255,.78);
+      box-shadow:0 8px 22px rgba(13,78,81,.18), inset 0 1px 0 rgba(255,255,255,.9);
+      border:1px solid rgba(255,255,255,.78);
+      transition:transform .12s ease, background .16s ease, color .16s ease;
+    }
+    button:active{transform:translateY(1px) scale(.99);}
+    button.active{
+      background:linear-gradient(135deg,#ffe06c,#ff8b5c);
+      color:#6d2c0b;
+      border-color:rgba(255,255,255,.9);
+    }
+    .footerHint{
+      text-align:center;color:rgba(255,255,255,.9);
+      font-size:11px;font-weight:750;line-height:1.45;
+      margin-top:10px;text-shadow:0 2px 8px rgba(0,0,0,.16);
+    }
+    .panel{
+      position:fixed;left:0;right:0;bottom:0;z-index:20;
+      max-height:86vh;overflow:auto;
+      padding:18px 16px calc(22px + var(--safe-bottom));
+      background:linear-gradient(180deg,#fffdf4,#fff1c5 58%,#ffe0a7);
+      border-radius:28px 28px 0 0;
+      box-shadow:0 -20px 50px rgba(15,70,74,.28);
+      transform:translateY(105%);
+      transition:transform .28s cubic-bezier(.2,.8,.2,1);
+      border:2px solid rgba(255,255,255,.8);
+    }
+    .panel.open{transform:translateY(0);}
+    .scrim{position:fixed;inset:0;background:rgba(14,50,57,.38);z-index:19;opacity:0;pointer-events:none;transition:opacity .22s ease;}
+    .scrim.open{opacity:1;pointer-events:auto;}
+    .panelHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
+    .panel h2{font-size:20px;margin:0;color:#a12828;}
+    .closeBtn{min-height:42px;width:42px;border-radius:14px;padding:0;background:#fff;color:#a12828;}
+    .panelSection{background:rgba(255,255,255,.72);border:1px solid rgba(255,165,74,.3);border-radius:20px;padding:14px;margin-top:12px;}
+    .panelSection h3{margin:0 0 8px;color:#0c746d;font-size:16px;}
+    .miniTable{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;overflow:hidden;border-radius:14px;}
+    .miniTable th,.miniTable td{padding:9px 7px;border-bottom:1px solid rgba(15,116,109,.14);text-align:left;vertical-align:top;}
+    .miniTable th{background:#fff0b9;color:#843719;position:sticky;top:0;}
+    .miniTable tr:last-child td{border-bottom:none;}
+    .rules{margin:0;padding-left:1.1em;color:#415258;line-height:1.55;font-size:13px;}
+
+    .panelLead{margin:4px 0 12px;color:#415258;font-size:13px;line-height:1.6;font-weight:650;}
+    .caseGrid{display:flex;flex-direction:column;gap:7px;margin-top:10px;}
+    .caseRow{display:grid;grid-template-columns:minmax(68px,.82fr) minmax(92px,1.15fr) minmax(92px,1fr);gap:7px;align-items:stretch;}
+    .caseRow.head{font-size:11px;font-weight:900;color:#853719;}
+    .caseCell{
+      border:1px solid rgba(15,116,109,.14);
+      background:rgba(255,255,255,.72);
+      border-radius:15px;
+      padding:9px 8px;
+      min-width:0;
+      min-height:68px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .caseLabel{font-size:11px;font-weight:900;color:#7b4b1c;line-height:1.3;}
+    .caseMeaning{font-size:11.5px;color:#536569;line-height:1.35;font-weight:700;}
+    .soundCell{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:center;
+      gap:2px;
+      width:100%;
+      min-height:54px;
+      cursor:pointer;
+      position:relative;
+    }
+    .soundCell:active{transform:translateY(1px) scale(.995);}
+    .soundCell .ta,
+    .soundCell .ro,
+    .soundCell .ka{
+      display:block;
+      width:100%;
+      white-space:normal;
+      overflow-wrap:anywhere;
+      text-align:left;
+    }
+    .soundCell .ta{
+      font-family:"Noto Sans Tamil",system-ui,sans-serif;
+      font-size:16px;
+      line-height:1.22;
+      font-weight:950;
+      color:#a12828;
+      word-break:keep-all;
+    }
+    .soundCell .ro{font-size:10.5px;line-height:1.24;color:#0d6f69;font-weight:850;}
+    .soundCell .ka{font-size:10.5px;line-height:1.24;color:#2d3436;font-weight:850;}
+    .caseNote{margin:11px 2px 0;color:#415258;font-size:13px;line-height:1.65;font-weight:650;}
+    .audioMark{display:inline-grid;place-items:center;width:18px;height:18px;margin-left:4px;border-radius:50%;background:#fff0be;color:#a12828;font-size:10px;font-weight:900;vertical-align:1px;}
+    @media (max-width:390px){.caseRow{grid-template-columns:.82fr 1.05fr .9fr;gap:5px}.caseCell{padding:8px 6px;min-height:66px}.soundCell{min-height:52px}.soundCell .ta{font-size:14.5px}.soundCell .ro,.soundCell .ka{font-size:9.8px}}
+    .toast{
+      position:fixed;left:50%;bottom:calc(102px + var(--safe-bottom));transform:translateX(-50%) translateY(20px);
+      background:rgba(24,49,54,.92);color:#fff;border-radius:999px;padding:10px 14px;
+      font-size:12px;font-weight:850;opacity:0;pointer-events:none;z-index:50;
+      transition:opacity .18s ease, transform .18s ease;
+      white-space:nowrap;
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    @media (max-height:720px){
+      .stage{padding-top:120px;}
+      .card{min-height:clamp(260px,41vh,390px);padding:20px 17px 19px;}
+      .controls{margin-top:12px;}
+      button{min-height:47px;padding:9px 8px;border-radius:16px;font-size:12.5px;}
+    }
+  </style>
+
+  <meta name="theme-color" content="#c7352e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tamil Cards" />
+  <meta name="application-name" content="Tamil Cards" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="sunmark"></div>
+        <div class="title">
+          <strong>Tamil Study Cards</strong>
+          <span>標準口語｜Tamil Nadu bright cards</span>
+        </div>
+      </div>
+      <div class="lessonPill" id="lessonPill">1課</div>
+    </header>
+
+    <main class="stage">
+      <div class="progressLine"><div class="progressFill" id="progressFill"></div></div>
+      <section class="cardWrap">
+        <article class="card" id="card" aria-live="polite"></article>
+      </section>
+      <nav class="controls" aria-label="controls">
+        <button id="tableBtn">活用・格変化</button>
+        <button id="seqBtn" class="active">順番モード</button>
+        <button id="randBtn">ランダム</button>
+      </nav>
+      <div class="footerHint">カードをタップでタミル語音声｜上スワイプで次へ｜下スワイプで戻る｜左右で課移動</div>
+    </main>
+  </div>
+
+  <div class="scrim" id="scrim"></div>
+  <aside class="panel" id="panel" aria-hidden="true">
+    <div class="panelHead">
+      <h2>活用表・格変化メモ</h2>
+      <button class="closeBtn" id="closePanel">×</button>
+    </div>
+
+    <p class="panelLead">下のタミル語はタップで音声再生できます。格は「単語の役割を語尾で見せるしくみ」と考えると、文の中で何をしている語なのかが見えやすくなります。</p>
+    <div class="panelSection caseSection">
+<h3>主格・そのままの形 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Nominative / base form</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+</div>
+</div>
+<p class="caseNote">主格は、文の主役になる形です。英語の I / you / he のように、まず辞書形・呼び出し名として見るとわかりやすいです。タミル語では語順よりも格語尾で役割を見せるので、ここは「まだ何も付いていない出発点」です。</p>
+</div>
+<div class="panelSection caseSection">
+<h3>名詞語幹 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Oblique stem before case suffixes</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="என்" aria-label="என் を再生"><span class="ta">என்</span><span class="ro">eṉ</span><span class="ka">イェン</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நம்" aria-label="நம் を再生"><span class="ta">நம்</span><span class="ro">nam</span><span class="ka">ナム</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எங்கள்" aria-label="எங்கள் を再生"><span class="ta">எங்கள்</span><span class="ro">eṅgaḷ</span><span class="ka">イェンガル</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உன்" aria-label="உன் を再生"><span class="ta">உன்</span><span class="ro">uṉ</span><span class="ka">ウン</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உங்கள்" aria-label="உங்கள் を再生"><span class="ta">உங்கள்</span><span class="ro">uṅgaḷ</span><span class="ka">ウンガル</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன" aria-label="அவன を再生"><span class="ta">அவன</span><span class="ro">avaṉ-a</span><span class="ka">アヴァナ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன" aria-label="ராமன を再生"><span class="ta">ராமன</span><span class="ro">rāmaṉ-a</span><span class="ka">ラーマナ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள" aria-label="அவள を再生"><span class="ta">அவள</span><span class="ro">avaḷ-a</span><span class="ka">アヴァラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா. சீதாவ" aria-label="சீதா / சீதாவ を再生"><span class="ta">சீதா / சீதாவ</span><span class="ro">sītā / sītā-v</span><span class="ka">シーター / シーターヴァ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இத" aria-label="இத を再生"><span class="ta">இத</span><span class="ro">idh-a</span><span class="ka">イダ</span></span></div>
+</div>
+</div>
+<p class="caseNote">名詞語幹は、格語尾を付ける前の土台です。日本語で言うと「私＋を」「私＋に」の前に、いったん「私」が格語尾を受けられる形へ変わる感じです。まずは、主格そのままに付けるのではなく、この語幹を経由するものがある、と見るのがコツです。</p>
+</div>
+<div class="panelSection caseSection">
+<h3>対格 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Accusative / direct object</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="என்னை" aria-label="என்னை を再生"><span class="ta">என்னை</span><span class="ro">eṉṉai</span><span class="ka">イェンナイ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நம்மை" aria-label="நம்மை を再生"><span class="ta">நம்மை</span><span class="ro">nammai</span><span class="ka">ナンマイ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எங்களை" aria-label="எங்களை を再生"><span class="ta">எங்களை</span><span class="ro">eṅgaḷ-ai</span><span class="ka">イェンガライ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உன்னை" aria-label="உன்னை を再生"><span class="ta">உன்னை</span><span class="ro">unnai</span><span class="ka">ウンナイ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உங்களை" aria-label="உங்களை を再生"><span class="ta">உங்களை</span><span class="ro">uṅgaḷ-ai</span><span class="ka">ウンガライ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவனை" aria-label="அவனை を再生"><span class="ta">அவனை</span><span class="ro">avaṉ-ai</span><span class="ka">アヴァナイ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமனை" aria-label="ராமனை を再生"><span class="ta">ராமனை</span><span class="ro">rāmaṉ-ai</span><span class="ka">ラーマナイ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவளை" aria-label="அவளை を再生"><span class="ta">அவளை</span><span class="ro">avaḷ-ai</span><span class="ka">アヴァライ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதாவை" aria-label="சீதாவை を再生"><span class="ta">சீதாவை</span><span class="ro">sītā-vai</span><span class="ka">シーターヴァイ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்களை" aria-label="அவங்களை を再生"><span class="ta">அவங்களை</span><span class="ro">avaṅgaḷ-ai</span><span class="ka">アヴァンガライ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இதை" aria-label="இதை を再生"><span class="ta">இதை</span><span class="ro">idh-ai</span><span class="ka">イダイ</span></span></div>
+</div>
+</div>
+<p class="caseNote">対格は、日本語の「〜を」に近い格です。英語で言うと目的語、つまり see him / eat idli の him や idli の位置です。人を目的語にするときは特に出やすく、「誰を」「何を」受けているかを示します。</p>
+</div>
+<div class="panelSection caseSection">
+<h3>与格 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Dative / to, for</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எனக்கு" aria-label="எனக்கு を再生"><span class="ta">எனக்கு</span><span class="ro">eṉ-akku</span><span class="ka">イェナック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நமக்கு" aria-label="நமக்கு を再生"><span class="ta">நமக்கு</span><span class="ro">nam-akku</span><span class="ka">ナマック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எங்களுக்கு" aria-label="எங்களுக்கு を再生"><span class="ta">எங்களுக்கு</span><span class="ro">eṅgaḷ-ukku</span><span class="ka">イェンガルック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உனக்கு" aria-label="உனக்கு を再生"><span class="ta">உனக்கு</span><span class="ro">uṉ-akku</span><span class="ka">ウナック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உங்களுக்கு" aria-label="உங்களுக்கு を再生"><span class="ta">உங்களுக்கு</span><span class="ro">uṅgaḷ-ukku</span><span class="ka">ウンガルック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவனுக்கு" aria-label="அவனுக்கு を再生"><span class="ta">அவனுக்கு</span><span class="ro">avaṉ-ukku</span><span class="ka">アヴァナック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமனுக்கு" aria-label="ராமனுக்கு を再生"><span class="ta">ராமனுக்கு</span><span class="ro">rāmaṉ-ukku</span><span class="ka">ラーマナック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவளுக்கு" aria-label="அவளுக்கு を再生"><span class="ta">அவளுக்கு</span><span class="ro">avaḷ-ukku</span><span class="ka">アヴァルック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதாவுக்கு" aria-label="சீதாவுக்கு を再生"><span class="ta">சீதாவுக்கு</span><span class="ro">sītā-vukku</span><span class="ka">シーターヴック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்களுக்கு" aria-label="அவங்களுக்கு を再生"><span class="ta">அவங்களுக்கு</span><span class="ro">avaṅgaḷ-ukku</span><span class="ka">アヴァンガルック</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இதுக்கு" aria-label="இதுக்கு を再生"><span class="ta">இதுக்கு</span><span class="ro">idh-ukku</span><span class="ka">イドゥック</span></span></div>
+</div>
+</div>
+<p class="caseNote">与格は「〜に」「〜のために」に近い格です。英語の to / for にかなり近く、எனக்கு டீ கொடுங்க の எனக்கு は「私に」です。タミル語では「私には〜がある」「私には〜が好き」のような感覚にも広がります。</p>
+</div>
+<div class="panelSection caseSection">
+<h3>属格・所有 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Genitive / possessive</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="என். என்னோட" aria-label="என் / என்னோட を再生"><span class="ta">என் / என்னோட</span><span class="ro">eṉ / eṉṉ-ōḍa</span><span class="ka">イェン / イェンノーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நம். நம்மோட" aria-label="நம் / நம்மோட を再生"><span class="ta">நம் / நம்மோட</span><span class="ro">nam / namm-ōḍa</span><span class="ka">ナム / ナンモーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எங்கள். எங்களோட" aria-label="எங்கள் / எங்களோட を再生"><span class="ta">எங்கள் / எங்களோட</span><span class="ro">eṅgaḷ / eṅgaḷ-ōḍa</span><span class="ka">イェンガル / イェンガローダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உன். உன்னோட" aria-label="உன் / உன்னோட を再生"><span class="ta">உன் / உன்னோட</span><span class="ro">uṉ / unn-ōḍa</span><span class="ka">ウン / ウンノーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உங்கள். உங்களோட" aria-label="உங்கள் / உங்களோட を再生"><span class="ta">உங்கள் / உங்களோட</span><span class="ro">uṅgaḷ / uṅgaḷ-ōḍa</span><span class="ka">ウンガル / ウンガローダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவனோட" aria-label="அவனோட を再生"><span class="ta">அவனோட</span><span class="ro">avaṉ-ōḍa</span><span class="ka">アヴァノーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமனோட" aria-label="ராமனோட を再生"><span class="ta">ராமனோட</span><span class="ro">rāmaṉ-ōḍa</span><span class="ka">ラーマノーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவளோட" aria-label="அவளோட を再生"><span class="ta">அவளோட</span><span class="ro">avaḷ-ōḍa</span><span class="ka">アヴァローダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதாவோட" aria-label="சீதாவோட を再生"><span class="ta">சீதாவோட</span><span class="ro">sītā-vōḍa</span><span class="ka">シーターヴォーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்களோட" aria-label="அவங்களோட を再生"><span class="ta">அவங்களோட</span><span class="ro">avaṅgaḷ-ōḍa</span><span class="ka">アヴァンガローダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இதோட" aria-label="இதோட を再生"><span class="ta">இதோட</span><span class="ro">idh-ōḍa</span><span class="ka">イドーダ</span></span></div>
+</div>
+</div>
+<p class="caseNote">属格は「〜の」を作る格です。英語の my / your / his や of に近いです。口語では -ஓட（ōḍa）がとても便利で、「私の」だけでなく、文脈によって「私と一緒に」にも見えるので、後ろの名詞や動詞で判断します。</p>
+</div>
+<div class="panelSection caseSection">
+<h3>共格・同伴格 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Sociative / with</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="என்னோட" aria-label="என்னோட を再生"><span class="ta">என்னோட</span><span class="ro">eṉṉ-ōḍa</span><span class="ka">イェンノーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நம்மோட" aria-label="நம்மோட を再生"><span class="ta">நம்மோட</span><span class="ro">namm-ōḍa</span><span class="ka">ナンモーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எங்களோட" aria-label="எங்களோட を再生"><span class="ta">எங்களோட</span><span class="ro">eṅgaḷ-ōḍa</span><span class="ka">イェンガローダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உன்னோட" aria-label="உன்னோட を再生"><span class="ta">உன்னோட</span><span class="ro">unn-ōḍa</span><span class="ka">ウンノーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உங்களோட" aria-label="உங்களோட を再生"><span class="ta">உங்களோட</span><span class="ro">uṅgaḷ-ōḍa</span><span class="ka">ウンガローダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவனோட" aria-label="அவனோட を再生"><span class="ta">அவனோட</span><span class="ro">avaṉ-ōḍa</span><span class="ka">アヴァノーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமனோட" aria-label="ராமனோட を再生"><span class="ta">ராமனோட</span><span class="ro">rāmaṉ-ōḍa</span><span class="ka">ラーマノーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவளோட" aria-label="அவளோட を再生"><span class="ta">அவளோட</span><span class="ro">avaḷ-ōḍa</span><span class="ka">アヴァローダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதாவோட" aria-label="சீதாவோட を再生"><span class="ta">சீதாவோட</span><span class="ro">sītā-vōḍa</span><span class="ka">シーターヴォーダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்களோட" aria-label="அவங்களோட を再生"><span class="ta">அவங்களோட</span><span class="ro">avaṅgaḷ-ōḍa</span><span class="ka">アヴァンガローダ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இதோட" aria-label="இதோட を再生"><span class="ta">இதோட</span><span class="ro">idh-ōḍa</span><span class="ka">イドーダ</span></span></div>
+</div>
+</div>
+<p class="caseNote">共格は「〜と一緒に」の格です。英語の with に近いです。口語では属格と同じ -ஓட（ōḍa）で表すことが多く、ராமனோட போங்க なら「ラーマと一緒に行ってください」という感じになります。</p>
+</div>
+<div class="panelSection caseSection">
+<h3>具格・手段格 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Instrumental / by, with, because of</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="என்னால" aria-label="என்னால を再生"><span class="ta">என்னால</span><span class="ro">eṉṉ-āla</span><span class="ka">イェンナーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நம்மால" aria-label="நம்மால を再生"><span class="ta">நம்மால</span><span class="ro">namm-āla</span><span class="ka">ナンマーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எங்களால" aria-label="எங்களால を再生"><span class="ta">எங்களால</span><span class="ro">eṅgaḷ-āla</span><span class="ka">イェンガラーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உன்னால" aria-label="உன்னால を再生"><span class="ta">உன்னால</span><span class="ro">unn-āla</span><span class="ka">ウンナーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உங்களால" aria-label="உங்களால を再生"><span class="ta">உங்களால</span><span class="ro">uṅgaḷ-āla</span><span class="ka">ウンガラーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவனால" aria-label="அவனால を再生"><span class="ta">அவனால</span><span class="ro">avaṉ-āla</span><span class="ka">アヴァナーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமனால" aria-label="ராமனால を再生"><span class="ta">ராமனால</span><span class="ro">rāmaṉ-āla</span><span class="ka">ラーマナーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவளால" aria-label="அவளால を再生"><span class="ta">அவளால</span><span class="ro">avaḷ-āla</span><span class="ka">アヴァラーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதாவால" aria-label="சீதாவால を再生"><span class="ta">சீதாவால</span><span class="ro">sītā-vāla</span><span class="ka">シーターヴァーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்களால" aria-label="அவங்களால を再生"><span class="ta">அவங்களால</span><span class="ro">avaṅgaḷ-āla</span><span class="ka">アヴァンガラーラ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இதால" aria-label="இதால を再生"><span class="ta">இதால</span><span class="ro">idh-āla</span><span class="ka">イダーラ</span></span></div>
+</div>
+</div>
+<p class="caseNote">具格は「〜で」「〜によって」「〜のせいで」を表します。英語の by / with / because of に近いです。என்னால なら「私によって」「私のせいで」「私にはできる/できない」のような文でも出てきます。</p>
+</div>
+<div class="panelSection caseSection">
+<h3>所格・場所格 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Locative / at, in, with someone</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="என்கிட்ட" aria-label="என்கிட்ட を再生"><span class="ta">என்கிட்ட</span><span class="ro">eṉ-kiṭṭa</span><span class="ka">イェンキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நம்மகிட்ட" aria-label="நம்மகிட்ட を再生"><span class="ta">நம்மகிட்ட</span><span class="ro">namma-kiṭṭa</span><span class="ka">ナンマキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எங்கள்கிட்ட" aria-label="எங்கள்கிட்ட を再生"><span class="ta">எங்கள்கிட்ட</span><span class="ro">eṅgaḷ-kiṭṭa</span><span class="ka">イェンガルキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உன்கிட்ட" aria-label="உன்கிட்ட を再生"><span class="ta">உன்கிட்ட</span><span class="ro">uṉ-kiṭṭa</span><span class="ka">ウンキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உங்கள்கிட்ட" aria-label="உங்கள்கிட்ட を再生"><span class="ta">உங்கள்கிட்ட</span><span class="ro">uṅgaḷ-kiṭṭa</span><span class="ka">ウンガルキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்கிட்ட" aria-label="அவன்கிட்ட を再生"><span class="ta">அவன்கிட்ட</span><span class="ro">avaṉ-kiṭṭa</span><span class="ka">アヴァンキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்கிட்ட" aria-label="ராமன்கிட்ட を再生"><span class="ta">ராமன்கிட்ட</span><span class="ro">rāmaṉ-kiṭṭa</span><span class="ka">ラーマンキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்கிட்ட" aria-label="அவள்கிட்ட を再生"><span class="ta">அவள்கிட்ட</span><span class="ro">avaḷ-kiṭṭa</span><span class="ka">アヴァルキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா கிட்ட" aria-label="சீதா கிட்ட を再生"><span class="ta">சீதா கிட்ட</span><span class="ro">sītā kiṭṭa</span><span class="ka">シーター キッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்ககிட்ட" aria-label="அவங்ககிட்ட を再生"><span class="ta">அவங்ககிட்ட</span><span class="ro">avaṅga-kiṭṭa</span><span class="ka">アヴァンガキッタ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இதுல" aria-label="இதுல を再生"><span class="ta">இதுல</span><span class="ro">idhu-la</span><span class="ka">イドゥラ</span></span></div>
+</div>
+</div>
+<p class="caseNote">所格は場所を示す格です。英語の at / in に近いです。人に対しては口語で கிட்ட（kitta）を使いやすく、「私のところに」「私の手元に」「私のところでは」という感じになります。物や場所なら இதுல のように -ல（la）で「この中に／これで」と見ると入りやすいです。</p>
+</div>
+<div class="panelSection caseSection">
+<h3>奪格・起点格 <span class="audioMark">♪</span></h3>
+<div class="frontEn" style="margin:0 0 8px;">Ablative / from</div>
+<div class="caseGrid">
+<div class="caseRow head"><div>日本語</div><div>元の形</div><div>この格の形</div></div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私</div><div class="caseMeaning">I / me</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நான்" aria-label="நான் を再生"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="என்கிட்ட இருந்து" aria-label="என்கிட்ட இருந்து を再生"><span class="ta">என்கிட்ட இருந்து</span><span class="ro">eṉ-kiṭṭa irundhu</span><span class="ka">イェンキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含む</div><div class="caseMeaning">we, including you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாம்" aria-label="நாம் を再生"><span class="ta">நாம்</span><span class="ro">nām</span><span class="ka">ナーム</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நம்மகிட்ட இருந்து" aria-label="நம்மகிட்ட இருந்து を再生"><span class="ta">நம்மகிட்ட இருந்து</span><span class="ro">namma-kiṭṭa irundhu</span><span class="ka">ナンマキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">私たち・相手含まず</div><div class="caseMeaning">we, excluding you</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நாங்கள்" aria-label="நாங்கள் を再生"><span class="ta">நாங்கள்</span><span class="ro">nāṅkaḷ</span><span class="ka">ナーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="எங்கள்கிட்ட இருந்து" aria-label="எங்கள்கிட்ட இருந்து を再生"><span class="ta">எங்கள்கிட்ட இருந்து</span><span class="ro">eṅgaḷ-kiṭṭa irundhu</span><span class="ka">イェンガルキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">君</div><div class="caseMeaning">you, informal</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீ" aria-label="நீ を再生"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உன்கிட்ட இருந்து" aria-label="உன்கிட்ட இருந்து を再生"><span class="ta">உன்கிட்ட இருந்து</span><span class="ro">uṉ-kiṭṭa irundhu</span><span class="ka">ウンキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">あなた／あなたたち</div><div class="caseMeaning">you, respectful / plural</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="நீங்கள்" aria-label="நீங்கள் を再生"><span class="ta">நீங்கள்</span><span class="ro">nīṅkaḷ</span><span class="ka">ニーンガル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="உங்கள்கிட்ட இருந்து" aria-label="உங்கள்கிட்ட இருந்து を再生"><span class="ta">உங்கள்கிட்ட இருந்து</span><span class="ro">uṅgaḷ-kiṭṭa irundhu</span><span class="ka">ウンガルキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼</div><div class="caseMeaning">he / him</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்" aria-label="அவன் を再生"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவன்கிட்ட இருந்து" aria-label="அவன்கிட்ட இருந்து を再生"><span class="ta">அவன்கிட்ட இருந்து</span><span class="ro">avaṉ-kiṭṭa irundhu</span><span class="ka">アヴァンキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">ラーマ</div><div class="caseMeaning">Rama</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்" aria-label="ராமன் を再生"><span class="ta">ராமன்</span><span class="ro">rāmaṉ</span><span class="ka">ラーマン</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="ராமன்கிட்ட இருந்து" aria-label="ராமன்கிட்ட இருந்து を再生"><span class="ta">ராமன்கிட்ட இருந்து</span><span class="ro">rāmaṉ-kiṭṭa irundhu</span><span class="ka">ラーマンキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼女</div><div class="caseMeaning">she / her</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்" aria-label="அவள் を再生"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவள்கிட்ட இருந்து" aria-label="அவள்கிட்ட இருந்து を再生"><span class="ta">அவள்கிட்ட இருந்து</span><span class="ro">avaḷ-kiṭṭa irundhu</span><span class="ka">アヴァルキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">シータ</div><div class="caseMeaning">Sita</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா" aria-label="சீதா を再生"><span class="ta">சீதா</span><span class="ro">sītā</span><span class="ka">シーター</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="சீதா கிட்ட இருந்து" aria-label="சீதா கிட்ட இருந்து を再生"><span class="ta">சீதா கிட்ட இருந்து</span><span class="ro">sītā kiṭṭa irundhu</span><span class="ka">シーター キッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">彼ら／あの人たち</div><div class="caseMeaning">they / them</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்க" aria-label="அவங்க を再生"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="அவங்ககிட்ட இருந்து" aria-label="அவங்ககிட்ட இருந்து を再生"><span class="ta">அவங்ககிட்ட இருந்து</span><span class="ro">avaṅga-kiṭṭa irundhu</span><span class="ka">アヴァンガキッタ イルンドゥ</span></span></div>
+</div>
+<div class="caseRow">
+<div class="caseCell"><div class="caseLabel">これ</div><div class="caseMeaning">this / it</div></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இது" aria-label="இது を再生"><span class="ta">இது</span><span class="ro">idhu</span><span class="ka">イドゥ</span></span></div>
+<div class="caseCell"><span class="soundCell" role="button" tabindex="0" data-say="இதுல இருந்து" aria-label="இதுல இருந்து を再生"><span class="ta">இதுல இருந்து</span><span class="ro">idhu-la irundhu</span><span class="ka">イドゥラ イルンドゥ</span></span></div>
+</div>
+</div>
+<p class="caseNote">奪格は「〜から」を表す格です。英語の from に近いです。場所から離れる、誰かのところから来る、何かを起点にする、という読みになります。口語では கிட்ட இருந்து や ல இருந்து のように、場所表現に இருந்து を足すと考えると分かりやすいです。</p>
+</div>
+    <div class="panelSection">
+      <h3>動詞の基本活用イメージ：போ（行く） <span class="audioMark">♪</span></h3>
+      <table class="miniTable">
+        <thead><tr><th>人称</th><th>現在</th><th>過去</th><th>未来</th></tr></thead>
+        <tbody>
+          <tr><td><span class="soundCell" data-say="நான்"><span class="ta">நான்</span><span class="ro">nāṉ</span><span class="ka">ナーン</span></span></td><td><span class="soundCell" data-say="போறேன்"><span class="ta">போறேன்</span></span></td><td><span class="soundCell" data-say="போனேன்"><span class="ta">போனேன்</span></span></td><td><span class="soundCell" data-say="போவேன்"><span class="ta">போவேன்</span></span></td></tr>
+          <tr><td><span class="soundCell" data-say="நீ"><span class="ta">நீ</span><span class="ro">nī</span><span class="ka">ニー</span></span></td><td><span class="soundCell" data-say="போறே"><span class="ta">போறே</span></span></td><td><span class="soundCell" data-say="போனே"><span class="ta">போனே</span></span></td><td><span class="soundCell" data-say="போவே"><span class="ta">போவே</span></span></td></tr>
+          <tr><td><span class="soundCell" data-say="நீங்க"><span class="ta">நீங்க</span><span class="ro">nīṅga</span><span class="ka">ニーンガ</span></span></td><td><span class="soundCell" data-say="போறீங்க"><span class="ta">போறீங்க</span></span></td><td><span class="soundCell" data-say="போனீங்க"><span class="ta">போனீங்க</span></span></td><td><span class="soundCell" data-say="போவீங்க"><span class="ta">போவீங்க</span></span></td></tr>
+          <tr><td><span class="soundCell" data-say="அவன்"><span class="ta">அவன்</span><span class="ro">avaṉ</span><span class="ka">アヴァン</span></span></td><td><span class="soundCell" data-say="போறான்"><span class="ta">போறான்</span></span></td><td><span class="soundCell" data-say="போனான்"><span class="ta">போனான்</span></span></td><td><span class="soundCell" data-say="போவான்"><span class="ta">போவான்</span></span></td></tr>
+          <tr><td><span class="soundCell" data-say="அவள்"><span class="ta">அவள்</span><span class="ro">avaḷ</span><span class="ka">アヴァル</span></span></td><td><span class="soundCell" data-say="போறா"><span class="ta">போறா</span></span></td><td><span class="soundCell" data-say="போனா"><span class="ta">போனா</span></span></td><td><span class="soundCell" data-say="போவா"><span class="ta">போவா</span></span></td></tr>
+          <tr><td><span class="soundCell" data-say="அவங்க"><span class="ta">அவங்க</span><span class="ro">avaṅga</span><span class="ka">アヴァンガ</span></span></td><td><span class="soundCell" data-say="போறாங்க"><span class="ta">போறாங்க</span></span></td><td><span class="soundCell" data-say="போனாங்க"><span class="ta">போனாங்க</span></span></td><td><span class="soundCell" data-say="போவாங்க"><span class="ta">போவாங்க</span></span></td></tr>
+        </tbody>
+      </table>
+      <p class="caseNote">この表は「போ（行く）」だけを使った入口です。まず、語幹そのものよりも、語尾が人称と時制を同時に持つことを見ます。会話では நீங்க や அவங்க のような口語形がかなり使いやすいです。</p>
+    </div>
+    <div class="panelSection">
+      <h3>名詞の格変化ルール</h3>
+      <ul class="rules">
+        <li><b>-am</b> 終わり：மரம் → மரத்து（木 → 木に格語尾を付ける語幹）</li>
+        <li><b>-ṭu</b> 終わり：வீடு → வீட்டு（家 → 家に格語尾を付ける語幹）</li>
+        <li><b>-ṟu</b> 終わり：ஆறு → ஆற்று（川 → 川に格語尾を付ける語幹）</li>
+        <li><b>ā</b> 終わりの名前：சீதா → சீதாவை / சீதாவுக்கு のように <b>வ்</b> が入りやすいです。</li>
+        <li>初心者の入口では、まず「語幹にしてから格語尾が付く」と見るのが安全です。</li>
+      </ul>
+    </div>
+    <div class="panelSection">
+      <h3>カタカナ発音ルール</h3>
+      <ul class="rules">
+        <li><b>語頭 e / ē</b> は、読み上げ補助では「イェ / イェー」に寄せる。</li>
+        <li><b>k, t, p</b> は、母音にはさまれると「ガ・ドゥ・バ」寄り。重なると「ッ」で出す。</li>
+        <li><b>c</b> が重なると「ッチャ」寄りにする。</li>
+        <li><b>ṭ</b> は母音間で「ドゥ」寄り、重なると「ットゥ」。</li>
+        <li><b>ṟ</b> は単独ならラ行寄り、重なる <b>ṟṟ</b> は「ットゥ」寄りにする。</li>
+        <li>カタカナ欄は読みやすさ優先。細かい区別はタミル文字とローマ字欄に残す。</li>
+      </ul>
+    </div>
+  </aside>
+  <div class="toast" id="toast">音声を再生します</div>
+
+<script>
+const lessons = [
+  {
+    title:"1課 あいさつ・出身・名詞語幹",
+    cards:[
+      {kind:"sentence", frontJa:"これはマンゴーですか？", frontEn:"Is this a mango?", tamil:"இது மாம்பழமா?", roman:"idhu māmpaḻam-aa?", kana:"イドゥ マームバラマー？", ja:"これはマンゴーですか？", audio:"இது மாம்பழமா?"},
+      {kind:"sentence", frontJa:"はい、これはマンゴーです。", frontEn:"Yes, this is a mango.", tamil:"ஆமா, இது மாம்பழம்.", roman:"āmā, idhu māmpaḻam.", kana:"アーマー、イドゥ マームバラム。", ja:"はい、これはマンゴーです。", audio:"ஆமா, இது மாம்பழம்."},
+      {kind:"sentence", frontJa:"いいえ、これはマンゴーではありません。", frontEn:"No, this isn’t a mango.", tamil:"இல்லை, இது மாம்பழம் இல்லை.", roman:"illai, idhu māmpaḻam illai.", kana:"イッライ、イドゥ マームバラム イッライ。", ja:"いいえ、これはマンゴーではありません。", audio:"இல்லை, இது மாம்பழம் இல்லை."},
+      {kind:"sentence", frontJa:"あなたの名前は何ですか？", frontEn:"What’s your name?", tamil:"உங்க பேரு என்ன?", roman:"uṅga pēru enna?", kana:"ウンガ ペール イェンナ？", ja:"あなたのお名前は何ですか？", audio:"உங்க பேரு என்ன?"},
+      {kind:"sentence", frontJa:"君の名前は何？", frontEn:"What’s your name?", tamil:"உன் பேரு என்ன?", roman:"uṉ pēru enna?", kana:"ウン ペール イェンナ？", ja:"君の名前は何？", audio:"உன் பேரு என்ன?"},
+      {kind:"sentence", frontJa:"彼の名前は何ですか？", frontEn:"What’s his name?", tamil:"அவனோட பேரு என்ன?", roman:"avan-ōḍa pēru enna?", kana:"アヴァノーダ ペール イェンナ？", ja:"彼の名前は何ですか？", audio:"அவனோட பேரு என்ன?"},
+      {kind:"sentence", frontJa:"彼女の名前は何ですか？", frontEn:"What’s her name?", tamil:"அவளோட பேரு என்ன?", roman:"avaḷ-ōḍa pēru enna?", kana:"アヴァローダ ペール イェンナ？", ja:"彼女の名前は何ですか？", audio:"அவளோட பேரு என்ன?"},
+      {kind:"sentence", frontJa:"あなたの出身地はどれですか？", frontEn:"What’s your hometown?", tamil:"உங்க ஊர் எது?", roman:"uṅga ūr edhu?", kana:"ウンガ ウール イェドゥ？", ja:"あなたの町／出身地は何ですか？", audio:"உங்க ஊர் எது?"},
+      {kind:"sentence", frontJa:"あなたはどの町の出身ですか？", frontEn:"Which town are you from?", tamil:"நீங்க எந்த ஊர்?", roman:"nīṅga endha ūr?", kana:"ニーンガ イェンダ ウール？", ja:"あなたはどの町の人ですか？", audio:"நீங்க எந்த ஊர்?"},
+      {kind:"sentence", frontJa:"あなたは何人ですか？", frontEn:"What nationality are you?", tamil:"நீங்க எந்த நாட்டுக்காரர்?", roman:"nīṅga endha nāṭṭu-k-kārar?", kana:"ニーンガ イェンダ ナーットゥッカーラル？", ja:"あなたはどの国の人ですか？", audio:"நீங்க எந்த நாட்டுக்காரர்?"},
+      {kind:"sentence", frontJa:"あなたはタミル人ですか？", frontEn:"Are you Tamil?", tamil:"நீங்க தமிழரா?", roman:"nīṅga tamiḻar-aa?", kana:"ニーンガ タミララー？", ja:"あなたはタミル人ですか？", audio:"நீங்க தமிழரா?"},
+      {kind:"sentence", frontJa:"あなたは日本人ですか？", frontEn:"Are you Japanese?", tamil:"நீங்க ஜப்பான்காரரா?", roman:"nīṅga jappān-kārar-aa?", kana:"ニーンガ ジャッパーンカーララー？", ja:"あなたは日本人ですか？", audio:"நீங்க ஜப்பான்காரரா?"},
+      {kind:"sentence", frontJa:"はい、僕は日本人です。", frontEn:"Yes, I’m Japanese.", tamil:"ஆமா, நான் ஜப்பான்காரன்.", roman:"āmā, nāṉ jappān-kāraṉ.", kana:"アーマー、ナーン ジャッパーンカーラン。", ja:"はい、僕は日本人です。", audio:"ஆமா, நான் ஜப்பான்காரன்."},
+      {kind:"stem", frontJa:"1人称単数「நான்（ナーン）」の名詞語幹", frontEn:"Oblique stem of “I”", fromTamil:"நான்", toTamil:"என்", fromRoman:"nāṉ", toRoman:"eṉ", fromKana:"ナーン", toKana:"イェン", note:"「私」→「私の／私に格語尾を付ける語幹」"},
+      {kind:"stem", frontJa:"1人称複数・相手含む「நாம்（ナーム）」の名詞語幹", frontEn:"Oblique stem of inclusive “we”", fromTamil:"நாம்", toTamil:"நம்", fromRoman:"nām", toRoman:"nam", fromKana:"ナーム", toKana:"ナム", note:"「私たち、あなたも含む」→「私たちの」"},
+      {kind:"stem", frontJa:"1人称複数・相手含まず「நாங்கள்（ナーンガル）」の名詞語幹", frontEn:"Oblique stem of exclusive “we”", fromTamil:"நாங்கள்", toTamil:"எங்கள்", fromRoman:"nāṅkaḷ", toRoman:"eṅkaḷ", fromKana:"ナーンガル", toKana:"イェンガル", note:"「私たち、あなたは含まない」→「私たちの」"},
+      {kind:"stem", frontJa:"2人称単数「நீ（ニー）」の名詞語幹", frontEn:"Oblique stem of informal “you”", fromTamil:"நீ", toTamil:"உன்", fromRoman:"nī", toRoman:"uṉ", fromKana:"ニー", toKana:"ウン", note:"「君」→「君の」"},
+      {kind:"stem", frontJa:"2人称複数・丁寧「நீங்கள்（ニーンガル）」の名詞語幹", frontEn:"Oblique stem of respectful / plural “you”", fromTamil:"நீங்கள்", toTamil:"உங்கள்", fromRoman:"nīṅkaḷ", toRoman:"uṅkaḷ", fromKana:"ニーンガル", toKana:"ウンガル", note:"「あなた／あなたたち」→「あなたの／あなたたちの」"},
+      {kind:"stem", frontJa:"3人称単数男性「இவன்（イヴァン）」の名詞語幹", frontEn:"Oblique stem of “this man / he”", fromTamil:"இவன்", toTamil:"இவன்", fromRoman:"ivaṉ", toRoman:"ivaṉ", fromKana:"イヴァン", toKana:"イヴァン", note:"「この男性」→「この男性の／この男性に格語尾を付ける語幹」"},
+      {kind:"stem", frontJa:"3人称単数女性「இவள்（イヴァル）」の名詞語幹", frontEn:"Oblique stem of “this woman / she”", fromTamil:"இவள்", toTamil:"இவள்", fromRoman:"ivaḷ", toRoman:"ivaḷ", fromKana:"イヴァル", toKana:"イヴァル", note:"「この女性」→「この女性の／この女性に格語尾を付ける語幹」"},
+      {kind:"stem", frontJa:"3人称丁寧単数「இவர்（イヴァル）」の名詞語幹", frontEn:"Oblique stem of respectful “this person”", fromTamil:"இவர்", toTamil:"இவர்", fromRoman:"ivar", toRoman:"ivar", fromKana:"イヴァル", toKana:"イヴァル", note:"「この方」→「この方の／この方に格語尾を付ける語幹」"},
+      {kind:"stem", frontJa:"3人称複数「இவங்க（イヴァンガ）」の名詞語幹", frontEn:"Oblique stem of “these people / they”", fromTamil:"இவங்க", toTamil:"இவங்க", fromRoman:"ivaṅga", toRoman:"ivaṅga", fromKana:"イヴァンガ", toKana:"イヴァンガ", note:"「この人たち」→「この人たちの／この人たちに格語尾を付ける語幹」"},
+      {kind:"stem", frontJa:"3人称単複中性「இது（イドゥ）」の名詞語幹", frontEn:"Oblique stem of “this / it”", fromTamil:"இது", toTamil:"இத", fromRoman:"idhu", toRoman:"idh-a", fromKana:"イドゥ", toKana:"イダ", note:"「これ」→「これに格語尾を付ける語幹」"},
+      {kind:"stem", frontJa:"-amで終わる名詞「மரம்（マラム）」の名詞語幹", frontEn:"Oblique stem of a noun ending in -am", fromTamil:"மரம்", toTamil:"மரத்து", fromRoman:"maram", toRoman:"maratt-u", fromKana:"マラム", toKana:"マラットゥ", note:"木 → 木に格語尾を付ける語幹"},
+      {kind:"stem", frontJa:"-ṭuで終わる名詞「வீடு（ヴィードゥ）」の名詞語幹", frontEn:"Oblique stem of a noun ending in -ṭu", fromTamil:"வீடு", toTamil:"வீட்டு", fromRoman:"vīṭu", toRoman:"vīṭṭ-u", fromKana:"ヴィードゥ", toKana:"ヴィーットゥ", note:"家 → 家に格語尾を付ける語幹"},
+      {kind:"stem", frontJa:"-ṟuで終わる名詞「ஆறு（アール）」の名詞語幹", frontEn:"Oblique stem of a noun ending in -ṟu", fromTamil:"ஆறு", toTamil:"ஆற்று", fromRoman:"āṟu", toRoman:"āṟṟ-u", fromKana:"アール", toKana:"アーットゥ", note:"川 → 川に格語尾を付ける語幹"}
+    ]
+  },
+  {
+      "title": "2課 お店・お願い形・対格与格",
+      "cards": [
+          {
+              "kind": "sentence",
+              "frontJa": "何がありますか？",
+              "frontEn": "What is there?",
+              "tamil": "என்ன இருக்கு?",
+              "roman": "enna irukku?",
+              "kana": "イェンナ イルック？",
+              "ja": "何がありますか？",
+              "audio": "என்ன இருக்கு?"
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "他に何がありますか？",
+              "frontEn": "What else is there?",
+              "tamil": "வேற என்ன இருக்கு?",
+              "roman": "vēra enna irukku?",
+              "kana": "ヴェーラ イェンナ イルック？",
+              "ja": "他に何がありますか？",
+              "audio": "வேற என்ன இருக்கு?"
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "イドゥリはありますか？",
+              "frontEn": "Do you have idli?",
+              "tamil": "இட்லி இருக்கா?",
+              "roman": "iḍli irukkā?",
+              "kana": "イドゥリ イルッカー？",
+              "ja": "イドゥリはありますか？",
+              "audio": "இட்லி இருக்கா?"
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "このお店のイドゥリは美味しいです。",
+              "frontEn": "The idli at this shop is good.",
+              "tamil": "இந்த கடையோட இட்லி நல்லா இருக்கு.",
+              "roman": "indha kaḍai-yōḍa iḍli nallā irukku.",
+              "kana": "インダ カダイヨーダ イドゥリ ナッラー イルック。",
+              "ja": "このお店のイドゥリは美味しいです。",
+              "audio": "இந்த கடையோட இட்லி நல்லா இருக்கு."
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "OK、イドゥリを下さい。",
+              "frontEn": "OK, idli please.",
+              "tamil": "சரி, இட்லி கொடுங்க.",
+              "roman": "sari, iḍli koḍuṅga.",
+              "kana": "サリ、イドゥリ コドゥンガ。",
+              "ja": "OK、イドゥリを下さい。",
+              "audio": "சரி, இட்லி கொடுங்க."
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "それから、私にお茶を下さい。",
+              "frontEn": "And then, tea for me, please.",
+              "tamil": "அப்புறம், எனக்கு டீ கொடுங்க.",
+              "roman": "appuṟam, eṉ-akku ṭī koḍuṅga.",
+              "kana": "アップラム、イェナック ティー コドゥンガ。",
+              "ja": "それから、私にお茶を下さい。",
+              "audio": "அப்புறம், எனக்கு டீ கொடுங்க."
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "私の家に来て下さい。",
+              "frontEn": "Please come to my house.",
+              "tamil": "என் வீட்டுக்கு வாங்க.",
+              "roman": "eṉ vīṭṭu-kku vāṅga.",
+              "kana": "イェン ヴィーットゥック ヴァーンガ。",
+              "ja": "私の家に来て下さい。",
+              "audio": "என் வீட்டுக்கு வாங்க."
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "チェンナイに行ってください。",
+              "frontEn": "Please go to Chennai.",
+              "tamil": "சென்னைக்கு போங்க.",
+              "roman": "cennai-kku pōṅga.",
+              "kana": "チェンナイック ポーンガ。",
+              "ja": "チェンナイに行ってください。",
+              "audio": "சென்னைக்கு போங்க."
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "イドゥリはどうですか？",
+              "frontEn": "How is the idli?",
+              "tamil": "இட்லி எப்படி இருக்கு?",
+              "roman": "iḍli eppaḍi irukku?",
+              "kana": "イドゥリ イェッパディ イルック？",
+              "ja": "イドゥリはどうですか？",
+              "audio": "இட்லி எப்படி இருக்கு?"
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "美味しいですか？",
+              "frontEn": "Is it good?",
+              "tamil": "நல்லா இருக்கா?",
+              "roman": "nallā irukkā?",
+              "kana": "ナッラー イルッカー？",
+              "ja": "美味しいですか？",
+              "audio": "நல்லா இருக்கா?"
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "このお茶は美味しいです。",
+              "frontEn": "This tea is good.",
+              "tamil": "இந்த டீ நல்லா இருக்கு.",
+              "roman": "indha ṭī nallā irukku.",
+              "kana": "インダ ティー ナッラー イルック。",
+              "ja": "このお茶は美味しいです。",
+              "audio": "இந்த டீ நல்லா இருக்கு."
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "このお茶は美味しくありません。",
+              "frontEn": "This tea isn’t good.",
+              "tamil": "இந்த டீ நல்லா இல்லை.",
+              "roman": "indha ṭī nallā illai.",
+              "kana": "インダ ティー ナッラー イッライ。",
+              "ja": "このお茶は美味しくありません。",
+              "audio": "இந்த டீ நல்லா இல்லை."
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "あちらを、まさに見て下さい。",
+              "frontEn": "Please look exactly over there.",
+              "tamil": "அங்க தான் பாருங்க.",
+              "roman": "aṅga-thān pāruṅga.",
+              "kana": "アンガ ダーン パールンガ。",
+              "ja": "あちらを、まさに見て下さい。",
+              "audio": "அங்க தான் பாருங்க."
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "まさにこれですか？",
+              "frontEn": "Is it exactly this?",
+              "tamil": "இதுதானா?",
+              "roman": "idhu-thān-aa?",
+              "kana": "イドゥダーナー？",
+              "ja": "まさにこれですか？",
+              "audio": "இதுதானா?"
+          },
+          {
+              "kind": "sentence",
+              "frontJa": "はい、まさにそれです。",
+              "frontEn": "Yes, exactly that.",
+              "tamil": "ஆமா, அதுதான்.",
+              "roman": "āmā, adhu-thān.",
+              "kana": "アーマー、アドゥダーン。",
+              "ja": "はい、まさにそれです。",
+              "audio": "ஆமா, அதுதான்."
+          },
+          {
+              "kind": "stem",
+              "frontJa": "来る「வா（ヴァー）」のお願い形",
+              "frontEn": "Polite request form of “come”",
+              "fromTamil": "வா",
+              "toTamil": "வாங்க",
+              "fromRoman": "vā",
+              "toRoman": "vāṅga",
+              "fromKana": "ヴァー",
+              "toKana": "ヴァーンガ",
+              "note": "来る → 来て下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "行く「போ（ポー）」のお願い形",
+              "frontEn": "Polite request form of “go”",
+              "fromTamil": "போ",
+              "toTamil": "போங்க",
+              "fromRoman": "pō",
+              "toRoman": "pōṅga",
+              "fromKana": "ポー",
+              "toKana": "ポーンガ",
+              "note": "行く → 行って下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "言う「சொல்（ソル）」のお願い形",
+              "frontEn": "Polite request form of “say”",
+              "fromTamil": "சொல்",
+              "toTamil": "சொல்லுங்க",
+              "fromRoman": "sol",
+              "toRoman": "soll-uṅga",
+              "fromKana": "ソル",
+              "toKana": "ソッルンガ",
+              "note": "言う → 言って下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "話す「பேசு（ペース）」のお願い形",
+              "frontEn": "Polite request form of “speak”",
+              "fromTamil": "பேசு",
+              "toTamil": "பேசுங்க",
+              "fromRoman": "pēsu",
+              "toRoman": "pēsuṅga",
+              "fromKana": "ペース",
+              "toKana": "ペースンガ",
+              "note": "話す → 話して下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "見る「பார்（パール）」のお願い形",
+              "frontEn": "Polite request form of “see / look”",
+              "fromTamil": "பார்",
+              "toTamil": "பாருங்க",
+              "fromRoman": "pār",
+              "toRoman": "pār-uṅga",
+              "fromKana": "パール",
+              "toKana": "パールンガ",
+              "note": "見る → 見て下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "聞く「கேள்（ケール）」のお願い形",
+              "frontEn": "Polite request form of “listen / hear”",
+              "fromTamil": "கேள்",
+              "toTamil": "கேளுங்க",
+              "fromRoman": "kēḷ",
+              "toRoman": "kēḷ-uṅga",
+              "fromKana": "ケール",
+              "toKana": "ケールンガ",
+              "note": "聞く → 聞いて下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "食べる「சாப்பிடு（サーッピドゥ）」のお願い形",
+              "frontEn": "Polite request form of “eat”",
+              "fromTamil": "சாப்பிடு",
+              "toTamil": "சாப்பிடுங்க",
+              "fromRoman": "sāppiḍu",
+              "toRoman": "sāppiḍuṅga",
+              "fromKana": "サーッピドゥ",
+              "toKana": "サーッピドゥンガ",
+              "note": "食べる → 食べて下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "飲む「குடி（クディ）」のお願い形",
+              "frontEn": "Polite request form of “drink”",
+              "fromTamil": "குடி",
+              "toTamil": "குடிங்க",
+              "fromRoman": "kuḍi",
+              "toRoman": "kuḍiṅga",
+              "fromKana": "クディ",
+              "toKana": "クディンガ",
+              "note": "飲む → 飲んで下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "座る「உட்காரு（ウッカール）」のお願い形",
+              "frontEn": "Polite request form of “sit”",
+              "fromTamil": "உட்காரு",
+              "toTamil": "உட்காருங்க",
+              "fromRoman": "uṭkāru",
+              "toRoman": "uṭkār-uṅga",
+              "fromKana": "ウッカール",
+              "toKana": "ウッカールンガ",
+              "note": "座る → 座って下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "立つ「நில்（ニル）」のお願い形",
+              "frontEn": "Polite request form of “stand”",
+              "fromTamil": "நில்",
+              "toTamil": "நில்லுங்க",
+              "fromRoman": "nil",
+              "toRoman": "nill-uṅga",
+              "fromKana": "ニル",
+              "toKana": "ニッルンガ",
+              "note": "立つ → 立って下さい"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "1人称 単数「நான்（ナーン）」の対格",
+              "frontEn": "Accusative form of “I”",
+              "fromTamil": "நான்",
+              "toTamil": "என்னை",
+              "fromRoman": "nāṉ",
+              "toRoman": "eṉ-nai",
+              "fromKana": "ナーン",
+              "toKana": "イェンナイ",
+              "note": "私 → 私を"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "1人称 複数・相手含む「நாம்（ナーム）」の対格",
+              "frontEn": "Accusative form of inclusive “we”",
+              "fromTamil": "நாம்",
+              "toTamil": "நம்மை",
+              "fromRoman": "nām",
+              "toRoman": "nam-mai",
+              "fromKana": "ナーム",
+              "toKana": "ナンマイ",
+              "note": "私たち、あなたも含む → 私たちを"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "1人称 複数・相手含まず「நாங்கள்（ナーンガル）」の対格",
+              "frontEn": "Accusative form of exclusive “we”",
+              "fromTamil": "நாங்கள்",
+              "toTamil": "எங்களை",
+              "fromRoman": "nāṅkaḷ",
+              "toRoman": "eṅgaḷ-ai",
+              "fromKana": "ナーンガル",
+              "toKana": "イェンガライ",
+              "note": "私たち、あなたは含まない → 私たちを"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "2人称 単数「நீ（ニー）」の対格",
+              "frontEn": "Accusative form of informal “you”",
+              "fromTamil": "நீ",
+              "toTamil": "உன்னை",
+              "fromRoman": "nī",
+              "toRoman": "uṉ-nai",
+              "fromKana": "ニー",
+              "toKana": "ウンナイ",
+              "note": "君 → 君を"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "2人称 複数・丁寧「நீங்கள்（ニーンガル）」の対格",
+              "frontEn": "Accusative form of respectful / plural “you”",
+              "fromTamil": "நீங்கள்",
+              "toTamil": "உங்களை",
+              "fromRoman": "nīṅkaḷ",
+              "toRoman": "uṅgaḷ-ai",
+              "fromKana": "ニーンガル",
+              "toKana": "ウンガライ",
+              "note": "あなた／あなたたち → あなたを／あなたたちを"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 単数男性「இவன்（イヴァン）」の対格",
+              "frontEn": "Accusative form of “this man / he”",
+              "fromTamil": "இவன்",
+              "toTamil": "இவனை",
+              "fromRoman": "ivaṉ",
+              "toRoman": "ivaṉ-ai",
+              "fromKana": "イヴァン",
+              "toKana": "イヴァナイ",
+              "note": "この男性 → この男性を"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 単数女性「இவள்（イヴァル）」の対格",
+              "frontEn": "Accusative form of “this woman / she”",
+              "fromTamil": "இவள்",
+              "toTamil": "இவளை",
+              "fromRoman": "ivaḷ",
+              "toRoman": "ivaḷ-ai",
+              "fromKana": "イヴァル",
+              "toKana": "イヴァライ",
+              "note": "この女性 → この女性を"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 丁寧単数「இவர்（イヴァル）」の対格",
+              "frontEn": "Accusative form of respectful “this person”",
+              "fromTamil": "இவர்",
+              "toTamil": "இவரை",
+              "fromRoman": "ivar",
+              "toRoman": "ivar-ai",
+              "fromKana": "イヴァル",
+              "toKana": "イヴァライ",
+              "note": "この方 → この方を"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 複数「இவங்க（イヴァンガ）」の対格",
+              "frontEn": "Accusative form of “these people / they”",
+              "fromTamil": "இவங்க",
+              "toTamil": "இவங்களை",
+              "fromRoman": "ivaṅga",
+              "toRoman": "ivaṅgaḷ-ai",
+              "fromKana": "イヴァンガ",
+              "toKana": "イヴァンガライ",
+              "note": "この人たち → この人たちを"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 単複中性「இது（イドゥ）」の対格",
+              "frontEn": "Accusative form of “this / it”",
+              "fromTamil": "இது",
+              "toTamil": "இதை",
+              "fromRoman": "idhu",
+              "toRoman": "idh-ai",
+              "fromKana": "イドゥ",
+              "toKana": "イダイ",
+              "note": "これ → これを"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "1人称 単数「நான்（ナーン）」の与格",
+              "frontEn": "Dative form of “I”",
+              "fromTamil": "நான்",
+              "toTamil": "எனக்கு",
+              "fromRoman": "nāṉ",
+              "toRoman": "eṉ-akku",
+              "fromKana": "ナーン",
+              "toKana": "イェナック",
+              "note": "私 → 私に"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "1人称 複数・相手含む「நாம்（ナーム）」の与格",
+              "frontEn": "Dative form of inclusive “we”",
+              "fromTamil": "நாம்",
+              "toTamil": "நமக்கு",
+              "fromRoman": "nām",
+              "toRoman": "nam-akku",
+              "fromKana": "ナーム",
+              "toKana": "ナマック",
+              "note": "私たち、あなたも含む → 私たちに"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "1人称 複数・相手含まず「நாங்கள்（ナーンガル）」の与格",
+              "frontEn": "Dative form of exclusive “we”",
+              "fromTamil": "நாங்கள்",
+              "toTamil": "எங்களுக்கு",
+              "fromRoman": "nāṅkaḷ",
+              "toRoman": "eṅgaḷ-ukku",
+              "fromKana": "ナーンガル",
+              "toKana": "イェンガルック",
+              "note": "私たち、あなたは含まない → 私たちに"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "2人称 単数「நீ（ニー）」の与格",
+              "frontEn": "Dative form of informal “you”",
+              "fromTamil": "நீ",
+              "toTamil": "உனக்கு",
+              "fromRoman": "nī",
+              "toRoman": "uṉ-akku",
+              "fromKana": "ニー",
+              "toKana": "ウナック",
+              "note": "君 → 君に"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "2人称 複数・丁寧「நீங்கள்（ニーンガル）」の与格",
+              "frontEn": "Dative form of respectful / plural “you”",
+              "fromTamil": "நீங்கள்",
+              "toTamil": "உங்களுக்கு",
+              "fromRoman": "nīṅkaḷ",
+              "toRoman": "uṅgaḷ-ukku",
+              "fromKana": "ニーンガル",
+              "toKana": "ウンガルック",
+              "note": "あなた／あなたたち → あなたに／あなたたちに"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 単数男性「இவன்（イヴァン）」の与格",
+              "frontEn": "Dative form of “this man / he”",
+              "fromTamil": "இவன்",
+              "toTamil": "இவனுக்கு",
+              "fromRoman": "ivaṉ",
+              "toRoman": "ivaṉ-ukku",
+              "fromKana": "イヴァン",
+              "toKana": "イヴァナック",
+              "note": "この男性 → この男性に"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 単数女性「இவள்（イヴァル）」の与格",
+              "frontEn": "Dative form of “this woman / she”",
+              "fromTamil": "இவள்",
+              "toTamil": "இவளுக்கு",
+              "fromRoman": "ivaḷ",
+              "toRoman": "ivaḷ-ukku",
+              "fromKana": "イヴァル",
+              "toKana": "イヴァルック",
+              "note": "この女性 → この女性に"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 丁寧単数「இவர்（イヴァル）」の与格",
+              "frontEn": "Dative form of respectful “this person”",
+              "fromTamil": "இவர்",
+              "toTamil": "இவருக்கு",
+              "fromRoman": "ivar",
+              "toRoman": "ivar-ukku",
+              "fromKana": "イヴァル",
+              "toKana": "イヴァルック",
+              "note": "この方 → この方に"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 複数「இவங்க（イヴァンガ）」の与格",
+              "frontEn": "Dative form of “these people / they”",
+              "fromTamil": "இவங்க",
+              "toTamil": "இவங்களுக்கு",
+              "fromRoman": "ivaṅga",
+              "toRoman": "ivaṅgaḷ-ukku",
+              "fromKana": "イヴァンガ",
+              "toKana": "イヴァンガルック",
+              "note": "この人たち → この人たちに"
+          },
+          {
+              "kind": "stem",
+              "frontJa": "3人称 単複中性「இது（イドゥ）」の与格",
+              "frontEn": "Dative form of “this / it”",
+              "fromTamil": "இது",
+              "toTamil": "இதுக்கு",
+              "fromRoman": "idhu",
+              "toRoman": "idh-ukku",
+              "fromKana": "イドゥ",
+              "toKana": "イドゥック",
+              "note": "これ → これに"
+          }
+      ]
+  }
+];
+
+let lessonIndex = 0;
+let pairIndex = 0;
+let side = 0; // 0 front, 1 back
+let mode = 'seq';
+let randomDeck = [];
+let historyStack = [];
+let touchStartX = 0, touchStartY = 0, touchStartTime = 0, moved = false;
+const cardEl = document.getElementById('card');
+const lessonPill = document.getElementById('lessonPill');
+const progressFill = document.getElementById('progressFill');
+const toast = document.getElementById('toast');
+
+function currentCards(){ return lessons[lessonIndex].cards; }
+function currentCard(){ return currentCards()[pairIndex]; }
+function escapeHtml(str){ return String(str).replace(/[&<>"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s])); }
+function formatBreaks(str){
+  return escapeHtml(str)
+    .replace(/、/g, '、<br>')
+    .replace(/,\s*/g, ',<br>');
+}
+function prettifyStemCategory(cat){
+  return cat
+    .replace(/([123]人称)(単数|複数|単複|丁寧)/, '$1 $2')
+    .replace(/・/g, '・');
+}
+function stemFrontHtml(text){
+  const raw = String(text);
+  const m = raw.match(/^(.*?)「(.+?)（(.+?)）」の(.+)$/);
+  if(!m){
+    return `<div class="stemTitle">${escapeHtml(raw).replace(/「([^（」]+)（([^）]+)）」/g, '「<span class="tamilInline">$1</span>（$2）」')}</div>`;
+  }
+  const category = prettifyStemCategory(m[1]);
+  return `
+    <div class="stemFrontBlock">
+      <div class="stemCategory">${escapeHtml(category)}</div>
+      <div class="stemQuote">「<span class="tamilInline">${escapeHtml(m[2])}</span>（${escapeHtml(m[3])}）」の</div>
+      <div class="stemTarget">${escapeHtml(m[4])}</div>
+    </div>`;
+}
+function stemAudio(c){ return `${c.toTamil}. ${c.fromTamil}. ${c.toTamil}.`; }
+function audioText(c){ return c.kind === 'stem' ? stemAudio(c) : c.audio; }
+
+function render(){
+  const lesson = lessons[lessonIndex];
+  const cards = lesson.cards;
+  const c = currentCard();
+  lessonPill.textContent = `${lessonIndex+1}課 ${pairIndex+1}/${cards.length}`;
+  const progress = ((pairIndex * 2 + side + 1) / (cards.length * 2)) * 100;
+  progressFill.style.width = `${progress}%`;
+  const badge = side === 0 ? '表' : '裏';
+  let html = `<div class="sideBadge">${badge}</div><div class="tapHint">音声</div>`;
+  if(side === 0){
+    if(c.kind === 'stem'){
+      html += `${stemFrontHtml(c.frontJa)}<div class="frontEn">${formatBreaks(c.frontEn)}</div>`;
+    }else{
+      html += `<div class="frontJa">${formatBreaks(c.frontJa)}</div><div class="frontEn">${formatBreaks(c.frontEn)}</div>`;
+    }
+  }else{
+    if(c.kind === 'stem'){
+      html += `<div class="answerLabel">答え</div><div class="stemAnswer">${escapeHtml(c.toTamil)}</div>`;
+      html += `<div class="changeBlock"><span>${escapeHtml(c.fromTamil)}</span><span class="arrow">→</span><span class="toBig">${escapeHtml(c.toTamil)}</span></div>`;
+      html += `<div class="smallPair">${escapeHtml(c.fromRoman)} → <span class="answerRoman">${escapeHtml(c.toRoman)}</span></div>`;
+      html += `<div class="kanaPair">${escapeHtml(c.fromKana)} → <span class="answerKana">${escapeHtml(c.toKana)}</span></div>`;
+      html += `<div class="note">${escapeHtml(c.note)}</div>`;
+    }else{
+      html += `<div class="tamilText">${formatBreaks(c.tamil)}</div>`;
+      html += `<div class="roman">${formatBreaks(c.roman)}</div>`;
+      html += `<div class="kana">${formatBreaks(c.kana)}</div>`;
+      html += `<div class="meaning">${formatBreaks(c.ja)}</div>`;
+    }
+  }
+  cardEl.innerHTML = html;
+}
+
+function nextCard(){
+  if(side === 0){ side = 1; renderWithMotion('next'); return; }
+  side = 0;
+  if(mode === 'rand'){
+    historyStack.push(pairIndex);
+    if(randomDeck.length === 0) refillRandomDeck();
+    pairIndex = randomDeck.shift();
+  }else{
+    pairIndex = (pairIndex + 1) % currentCards().length;
+  }
+  renderWithMotion('next');
+}
+
+function prevCard(){
+  if(side === 1){ side = 0; renderWithMotion('next'); return; }
+  if(mode === 'rand'){
+    if(historyStack.length === 0){ showToast('戻れるカードがありません'); return; }
+    pairIndex = historyStack.pop();
+    side = 1;
+    renderWithMotion('next');
+    return;
+  }
+  pairIndex = (pairIndex - 1 + currentCards().length) % currentCards().length;
+  side = 1;
+  renderWithMotion('next');
+}
+
+function renderWithMotion(kind){
+  cardEl.classList.add(kind === 'side' ? 'isLeavingSide' : 'isLeavingNext');
+  setTimeout(()=>{ render(); cardEl.classList.remove('isLeavingNext','isLeavingSide'); }, 120);
+}
+
+function changeLesson(dir){
+  if(lessons.length <= 1){ showToast('この向きには課移動できません'); return; }
+  lessonIndex = (lessonIndex + dir + lessons.length) % lessons.length;
+  pairIndex = 0; side = 0; refillRandomDeck();
+  renderWithMotion('side');
+}
+
+function refillRandomDeck(){
+  const len = currentCards().length;
+  randomDeck = Array.from({length:len},(_,i)=>i).filter(i => i !== pairIndex);
+  for(let i=randomDeck.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [randomDeck[i],randomDeck[j]] = [randomDeck[j],randomDeck[i]];
+  }
+  if(randomDeck.length === 0) randomDeck = [0];
+}
+
+function setMode(next){
+  mode = next;
+  document.getElementById('seqBtn').classList.toggle('active', mode === 'seq');
+  document.getElementById('randBtn').classList.toggle('active', mode === 'rand');
+  historyStack = [];
+  if(mode === 'rand') refillRandomDeck();
+  showToast(mode === 'seq' ? '順番モード' : 'ランダムモード');
+}
+
+function makeUtter(text){
+  const utter = new SpeechSynthesisUtterance(text);
+  const voices = window.speechSynthesis.getVoices();
+  const taVoice = voices.find(v => /ta|Tamil/i.test(v.lang + ' ' + v.name)) || voices.find(v => /hi-IN|en-IN/i.test(v.lang));
+  if(taVoice) utter.voice = taVoice;
+  utter.lang = taVoice?.lang || 'ta-IN';
+  utter.rate = .86;
+  utter.pitch = 1.02;
+  return utter;
+}
+
+function speakText(text){
+  const utter = makeUtter(text);
+  window.speechSynthesis.speak(utter);
+  return utter;
+}
+
+function speak(text){
+  if(!('speechSynthesis' in window)){ showToast('この環境では音声非対応です'); return; }
+  window.speechSynthesis.cancel();
+  const c = currentCard();
+  if(c.kind === 'stem'){
+    const first = speakText(c.toTamil);
+    first.onend = () => {
+      setTimeout(() => {
+        const second = speakText(c.fromTamil);
+        second.onend = () => setTimeout(() => speakText(c.toTamil), 180);
+      }, 620);
+    };
+    showToast('答え → 元 → 答え');
+    return;
+  }
+  speakText(text);
+  showToast('タミル語音声');
+}
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(()=>toast.classList.remove('show'), 980);
+}
+
+cardEl.addEventListener('click', () => {
+  if(moved) return;
+  speak(audioText(currentCard()));
+});
+cardEl.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  touchStartX = t.clientX; touchStartY = t.clientY; touchStartTime = Date.now(); moved = false;
+}, {passive:true});
+cardEl.addEventListener('touchmove', e => {
+  const t = e.changedTouches[0];
+  if(Math.abs(t.clientX-touchStartX) > 12 || Math.abs(t.clientY-touchStartY) > 12) moved = true;
+}, {passive:true});
+cardEl.addEventListener('touchend', e => {
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
+  const elapsed = Date.now() - touchStartTime;
+  const absX = Math.abs(dx), absY = Math.abs(dy);
+  if(elapsed < 700 && Math.max(absX,absY) > 42){
+    if(absY > absX){
+      dy < 0 ? nextCard() : prevCard();
+    }else{
+      dx < 0 ? changeLesson(1) : changeLesson(-1);
+    }
+  }
+  setTimeout(()=>{moved=false;}, 60);
+}, {passive:true});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowUp' || e.key === ' ') nextCard();
+  if(e.key === 'ArrowDown') prevCard();
+  if(e.key === 'ArrowLeft') changeLesson(-1);
+  if(e.key === 'ArrowRight') changeLesson(1);
+  if(e.key.toLowerCase() === 'p') speak(audioText(currentCard()));
+});
+document.getElementById('seqBtn').addEventListener('click',()=>setMode('seq'));
+document.getElementById('randBtn').addEventListener('click',()=>setMode('rand'));
+const panel = document.getElementById('panel');
+const scrim = document.getElementById('scrim');
+function openPanel(){ panel.classList.add('open'); scrim.classList.add('open'); panel.setAttribute('aria-hidden','false'); }
+function closePanel(){ panel.classList.remove('open'); scrim.classList.remove('open'); panel.setAttribute('aria-hidden','true'); }
+document.getElementById('tableBtn').addEventListener('click',openPanel);
+document.getElementById('closePanel').addEventListener('click',closePanel);
+scrim.addEventListener('click',closePanel);
+
+function speakPanelText(text){
+  if(!('speechSynthesis' in window)){ showToast('この環境では音声非対応です'); return; }
+  window.speechSynthesis.cancel();
+  speakText(text);
+  showToast('メモ音声');
+}
+panel.addEventListener('click', e => {
+  const target = e.target.closest('[data-say]');
+  if(!target) return;
+  e.preventDefault();
+  e.stopPropagation();
+  speakPanelText(target.dataset.say);
+});
+panel.addEventListener('keydown', e => {
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  const target = e.target.closest('[data-say]');
+  if(!target) return;
+  e.preventDefault();
+  speakPanelText(target.dataset.say);
+});
+
+// Some browsers load voices asynchronously.
+if('speechSynthesis' in window){ window.speechSynthesis.onvoiceschanged = () => {}; }
+refillRandomDeck();
+render();
+</script>
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
